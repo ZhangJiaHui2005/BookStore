@@ -17,7 +17,6 @@ class CategoryController extends Controller
     }
 
     public function create(Request $request) {
-        // dd($request->all());
         Category::create($request->validate([
             'category_name' => ['required', 'max:50'],
           ]));

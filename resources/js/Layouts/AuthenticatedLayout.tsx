@@ -42,6 +42,13 @@ export default function Authenticated({
                                 >
                                     Categories
                                 </NavLink>
+
+                                <NavLink
+                                    href={route('authors.index')}
+                                    active={route().current('authors.index')}
+                                >
+                                    Authors
+                                </NavLink>
                             </div>
                         </div>
 

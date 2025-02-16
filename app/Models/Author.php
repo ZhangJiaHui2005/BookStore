@@ -9,7 +9,8 @@ class Author extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'bio', 'birth_date'];
+    protected $fillable = ['name'];
+    public $timestamps = false;
 
     /**
      * Get the books written by the author.
