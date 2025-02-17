@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Category;
@@ -32,6 +33,13 @@ Route::prefix('/author')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/create', [AuthorController::class, 'create'])->name('authors.create');
     Route::delete('/delete/{id}', [AuthorController::class, 'delete'])->name('authors.delete');
     Route::put('/update/{id}', [AuthorController::class, 'update'])->name('authors.update');
+});
+
+Route::prefix('/book')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', [BookController::class, 'index'])->name('books.index');
+    Route::post('/create', [BookController::class, 'create'])->name('books.create');
+    Route::delete('/delete/{id}', [BookController::class, 'delete'])->name('books.delete');
+    Route::put('/update/{id}', [BookController::class, 'update'])->name('books.update');
 });
 
 Route::middleware('auth')->group(function () {
