@@ -1,7 +1,7 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout'
 import { PageProps } from '@/types';
 import { Head, router } from '@inertiajs/react'
-import { Button, Label, Modal, Table, TextInput } from 'flowbite-react'
+import { Button, Label, Modal, Pagination, Table, TextInput } from 'flowbite-react'
 import React from 'react'
 import { toast } from 'react-toastify';
 
@@ -18,6 +18,8 @@ export default function Index({ authors }: PageProps<{ authors: Author[] }>) {
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [deleteAuthorId, setDeleteAuthorId] = React.useState<number | null>(null);
     const [editAuthorId, setEditAuthorId] = React.useState<number | null>(null);
+    const [currentPage, setCurrentPage] = React.useState(authors.current_page);
+    const [totalPages, setTotalPages] = React.useState(authors.last_page);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const key = e.target.id;
@@ -80,6 +82,12 @@ export default function Index({ authors }: PageProps<{ authors: Author[] }>) {
         setOpenCreateModal(true);
     }
 
+    function handlePageChange(page: number) {
+        setCurrentPage(page);
+        // Fetch new data based on the page number
+        router.get(`/categories?page=${page}`);
+    }
+
     return (
         <Authenticated
             header={
@@ -127,7 +135,7 @@ export default function Index({ authors }: PageProps<{ authors: Author[] }>) {
                                 </Table.Head>
 
                                 <Table.Body className='divide-y'>
-                                    {authors.map((author) => (
+                                    {authors.data.map((author) => (
                                         <Table.Row key={author.author_id}>
                                             <Table.Cell className='text-sm sm:text-xl'>{author.author_id}</Table.Cell>
                                             <Table.Cell className='text-sm sm:text-xl'>{author.name}</Table.Cell>
@@ -165,6 +173,12 @@ export default function Index({ authors }: PageProps<{ authors: Author[] }>) {
                                     ))}
                                 </Table.Body>
                             </Table>
+
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>

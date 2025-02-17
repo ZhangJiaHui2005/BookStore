@@ -1,4 +1,4 @@
-import { Label, Modal, TextInput } from 'flowbite-react';
+import { Label, Modal, Pagination, TextInput } from 'flowbite-react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Button, Table } from 'flowbite-react';
@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 interface Category {
     category_id: number;
     category_name: string;
+    current_page: number;
+    last_page: number;
 }
 
 export default function Index({ categories }: PageProps<{ categories: Category[] }>) {
@@ -19,6 +21,8 @@ export default function Index({ categories }: PageProps<{ categories: Category[]
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [deleteCategoryId, setDeleteCategoryId] = React.useState<number | null>(null);
     const [editCategoryId, setEditCategoryId] = React.useState<number | null>(null);
+    const [currentPage, setCurrentPage] = React.useState(categories.current_page);
+    const [totalPages, setTotalPages] = React.useState(categories.last_page);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const key = e.target.id;
@@ -81,6 +85,12 @@ export default function Index({ categories }: PageProps<{ categories: Category[]
         setOpenCreateModal(true);
     }
 
+    function handlePageChange(page: number) {
+        setCurrentPage(page);
+        // Fetch new data based on the page number
+        router.get(`/categories?page=${page}`);
+    }
+
     return (
         <AuthenticatedLayout
             header={
@@ -128,7 +138,7 @@ export default function Index({ categories }: PageProps<{ categories: Category[]
                                 </Table.Head>
 
                                 <Table.Body className='divide-y'>
-                                    {categories.map((category) => (
+                                    {categories.data.map((category) => (
                                         <Table.Row key={category.category_id}>
                                             <Table.Cell className='text-sm sm:text-xl'>{category.category_id}</Table.Cell>
                                             <Table.Cell className='text-sm sm:text-xl'>{category.category_name}</Table.Cell>
@@ -166,6 +176,12 @@ export default function Index({ categories }: PageProps<{ categories: Category[]
                                     ))}
                                 </Table.Body>
                             </Table>
+
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>
