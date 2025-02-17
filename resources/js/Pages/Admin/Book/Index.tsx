@@ -49,11 +49,11 @@ export default function Index({ books }: PageProps<{ books: BooksData }>) {
 
     function handleDeleteConfirm() {
         if (deleteBookId !== null) {
-            router.delete(`/categories/delete/${deleteBookId}`, {
+            router.delete(`/book/delete/${deleteBookId}`, {
                 onSuccess: () => {
                     setOpenDeleteModal(false);
                     setDeleteBookId(null);
-                    toast.success('Category deleted successfully!');
+                    toast.success('Book deleted successfully!');
                 }
             });
         }
@@ -83,7 +83,7 @@ export default function Index({ books }: PageProps<{ books: BooksData }>) {
         }
 
         if (editBookId === null) {
-            router.post('/book/create', formData, {
+            router.put('/book/create', formData, {
                 onSuccess: () => {
                     setOpenCreateModal(false);
                     setValues({

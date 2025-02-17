@@ -49,7 +49,7 @@ class BookController extends Controller
             'image' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $book = Book::findOrFail($id);
+        $book = Book::findOfFail($id);
 
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
@@ -68,7 +68,7 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
 
         // Delete the image if it exists
-        if ($book->image) {
+        if ($book) {
             Storage::disk('public')->delete($book->image);
         }
 
