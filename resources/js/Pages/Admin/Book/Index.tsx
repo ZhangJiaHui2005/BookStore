@@ -24,7 +24,7 @@ interface BooksData {
 }
 
 export default function Index({ books }: PageProps<{ books: BooksData }>) {
-    const { errors } = usePage().props
+    const { errors } = usePage().props;
 
     const [values, setValues] = React.useState({
         title: '',
@@ -61,7 +61,7 @@ export default function Index({ books }: PageProps<{ books: BooksData }>) {
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const key = e.target.id;
-        const value = key === 'image' ? e.target.files?.[0] || null : e.target.value;
+        const value = key === 'image' ? (e.target as HTMLInputElement).files?.[0] || null : e.target.value;
 
         setValues(values => ({
             ...values,
@@ -82,8 +82,10 @@ export default function Index({ books }: PageProps<{ books: BooksData }>) {
             formData.append('image', values.image);
         }
 
+        console.log([...formData.entries()]);
+
         if (editBookId === null) {
-            router.put('/book/create', formData, {
+            router.post('/book/create', formData, {
                 onSuccess: () => {
                     setOpenCreateModal(false);
                     setValues({
@@ -259,11 +261,11 @@ export default function Index({ books }: PageProps<{ books: BooksData }>) {
                                                 {/* Delete Book Modal */}
                                                 <Modal show={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
                                                     <Modal.Header>
-                                                        Delete Category
+                                                        Delete Book
                                                     </Modal.Header>
 
                                                     <Modal.Body>
-                                                        <p>Are you sure you want to delete this category?</p>
+                                                        <p>Are you sure you want to delete this book?</p>
                                                     </Modal.Body>
 
                                                     <Modal.Footer>

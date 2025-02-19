@@ -4,13 +4,18 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render("Client/Home");
+    $books = Book::limit(10)->get();
+
+    return Inertia::render("Client/Home", [
+        'books' => $books
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -39,7 +44,7 @@ Route::prefix('/book')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('books.index');
     Route::post('/create', [BookController::class, 'create'])->name('books.create');
     Route::delete('/delete/{id}', [BookController::class, 'delete'])->name('books.delete');
-    Route::put('/update/{id}', [BookController::class, 'update'])->name('books.update');
+    Route::post('/update/{id}', [BookController::class, 'update'])->name('books.update');
 });
 
 Route::middleware('auth')->group(function () {

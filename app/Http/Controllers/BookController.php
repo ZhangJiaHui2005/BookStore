@@ -40,16 +40,16 @@ class BookController extends Controller
 
     public function update(Request $request, $id) {
         $validated = $request->validate([
-            'title' => ['required', 'max:255'],
-            'author_id' => ['required', 'integer', 'exists:authors,author_id'],
-            'category_id' => ['required', 'integer', 'exists:categories,category_id'],
-            'price' => ['required', 'numeric'],
-            'isbn' => ['required', 'max:20'],
-            'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            'title' => 'required|string',
+            'author_id' => 'required|integer',
+            'category_id' => 'required|integer',
+            'price' => 'required|numeric',
+            'isbn' => 'required|string',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $book = Book::findOfFail($id);
+        $book = Book::findOrFail($id);
 
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
